@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+      
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      
+  </head>
+  <body style="background-color: gray">
+      
+      <div id="MainDiv" style="position: relative; width: 600px; height: 900px; background-color: darkcyan; margin: auto; border: 3px solid black; border-radius: 25px; top: 25px;">
+          
+      <h3 id="nameHolder" style="position: relative; width: 600px; height: 40px; text-align: center">Anonymous</h3>
+              
+      <div style="position: relative; width: 400px; height: 70px; text-align: center; margin: auto;">
+      
+          <form id="nameForm">
+          
+              <label>Pease enter a name</label>
+              
+              <input style="width: 400px" id="name" type="text" />
+              <input type="submit" style="width: 400px">
+              
+          </form>
+      </div>
+          
+          
+          <div id="messages" style="width: 550px; height: 650px; margin: auto; background-color: gray; border: 3px solid black; border-radius: 3px; position: relative; top: 25px; overflow: auto; word-wrap: break-word"></div>
+      
+              
+      <div id="messageSender" style="position: relative; width: 400px; margin: auto; top: 40px">
+      
+    <form action="" id="form">
+      <input style="width: 400px" id="m" autocomplete="off" /><button style="width: 400px">Send</button>
+    </form>
+          
+      </div>
+          
+      </div>
+          
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        
+      $(function () {
+        var socket = io();
+          
+          $('#nameForm').submit(function() {
+              
+              event.preventDefault();
+              
+              var username = $("#name").val();
+                            
+              $('#nameHolder').text(username);
+              
+                })
+              
+              $('#form').submit(function(){
+          socket.emit('chat message', '-' + $('#name').val() + '- ' + $('#m').val());
+          $('#m').val('');
+                  
+          $("#messages").animate({
+          scrollTop: $("#messages").height()
+        }, 300);
+                  
+          return false;
+        });
+          
+        socket.on('chat message', function(msg){
+          $('#messages').append(msg + '<br>');
+        });
+              
+      });
+    </script>
+      <script src="/socket.io/socket.io.js"></script>
+  </body>
+</html>
